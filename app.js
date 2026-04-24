@@ -140,6 +140,8 @@ const drawerTitle = document.getElementById("drawer-title");
 const drawerCopy = document.getElementById("drawer-copy");
 const leadForm = document.getElementById("lead-form");
 const newLeadButton = document.getElementById("new-lead-button");
+const exportButton = document.getElementById("export-button");
+const resetButton = document.getElementById("reset-button");
 const countryStatusCo = document.getElementById("country-status-co");
 const countryStatusEc = document.getElementById("country-status-ec");
 const statusPicker = document.getElementById("status-picker");
@@ -194,6 +196,42 @@ function loadLeads() {
 
 function saveLeads() {
   window.localStorage.setItem(STORAGE_KEY, JSON.stringify(leadsByCountry));
+}
+
+function exportLeads() {
+  const payload = {
+    exportedAt: new Date().toISOString(),
+    leads: leadsByCountry,
+  };
+  const blob = new Blob([JSON.stringify(payload, null, 2)], {
+    type: "application/json",
+  });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  const dateStamp = new Date().toISOString().slice(0, 10);
+
+  link.href = url;
+  link.download = `maxlien-leads-${dateStamp}.json`;
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+  URL.revokeObjectURL(url);
+}
+
+function resetDemoLeads() {
+  const confirmed = window.confirm(
+    "Restaurar os dados demo e apagar os leads salvos neste navegador?"
+  );
+
+  if (!confirmed) {
+    return;
+  }
+
+  leadsByCountry = cloneSeedData();
+  syncLeadPricing();
+  saveLeads();
+  closeDrawer();
+  renderTable();
 }
 
 function normalizeQuantity(quantity) {
@@ -605,6 +643,8 @@ statusFilter.addEventListener("change", (event) => {
 });
 
 newLeadButton.addEventListener("click", openCreateDrawer);
+exportButton.addEventListener("click", exportLeads);
+resetButton.addEventListener("click", resetDemoLeads);
 
 document.querySelectorAll("[data-close-drawer]").forEach((item) => {
   item.addEventListener("click", closeDrawer);

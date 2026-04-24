@@ -496,6 +496,11 @@ tbody tr.row-agendado {
   color: var(--text);
 }
 
+.subtle-button {
+  background: #fff6ef;
+  color: #9a3412;
+}
+
 .actions-cell {
   display: flex;
   gap: 8px;
@@ -817,6 +822,10 @@ tbody tr.row-agendado {
 @media (max-width: 720px) {
   .content {
     padding: 18px;
+  }
+
+  .hero h1 {
+    max-width: none;
   }
 
   .panel-head,
