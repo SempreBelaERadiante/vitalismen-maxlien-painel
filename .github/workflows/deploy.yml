@@ -32,4 +32,4 @@ jobs:
           npx wrangler whoami
 
       - name: Deploy to Cloudflare Pages
-        run: npx wrangler pages deploy . --project-name painel-maxlien --branch main
+        run: npx wrangler pages deploy . --project-name painel-maxlien-prod --branch main
